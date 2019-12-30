@@ -35,7 +35,7 @@
                        label="序号"
                        width="95">
         <template slot-scope="scope">
-          {{ scope.row.id }}
+          {{ scope.$index+1 }}
         </template>
       </el-table-column>
       <el-table-column label="时间"
@@ -48,8 +48,7 @@
                        width="230"
                        align="center">
         <template slot-scope="scope">
-          <el-button size="mini"
-                     type="danger"
+          <el-button type="danger"
                      @click="handleDelete(scope.row)">删除</el-button>
         </template>
       </el-table-column>
@@ -60,9 +59,11 @@
                width="30%">
       <el-form>
         <el-form-item label="时间">
-          <el-input v-model="form.date"
-                    placeholder="请输入时间"
-                    clearable />
+
+          <el-date-picker v-model="form.date"
+                          type="date"
+                          placeholder="选择日期">
+          </el-date-picker>
         </el-form-item>
       </el-form>
       <span slot="footer"
@@ -109,7 +110,11 @@ export default {
       },
       form: {
         date: '',
-      }
+      },
+      year: '',
+      month: '',
+      day: '',
+      Date: '',
     }
   },
   created () {
@@ -118,8 +123,6 @@ export default {
   methods: {
     getList () {
       this.listQuery.course_id = this.$route.query.course_id;
-      console.log(this.listQuery);
-
       this.listLoading = true;
       request({
         url: "/api/backend/courseDate/index",
@@ -129,6 +132,7 @@ export default {
         this.total = response.data.total;
 
         this.list = response.data.data;
+
         this.listLoading = false;
       });
     },
@@ -142,13 +146,11 @@ export default {
         cancelButtonText: "取消",
         type: "warning"
       }).then(() => {
-        console.log(1234);
         request({
           url: "/api/backend/courseDate/delete",
           method: "post",
           data: { id: row.id },
         }).then(() => {
-          console.log(123);
 
           // 删除最后一条数据时无数据问题
           this.list.length <= 1 ? this.listQuery.page-- : false;
@@ -169,21 +171,26 @@ export default {
       this.getList();
     },
     saveData () {
+      let test = new Date(this.form.date)
+      this.year = new Date(this.form.date).getFullYear()
+      this.month = new Date(this.form.date).getMonth() + 1
+      this.day = new Date(this.form.date).getDate()
+      this.Date = this.year + '-' + this.month + '-' + this.day
       this.btnLoading = true;
       request({
         url: "/api/backend/course/setCourseDate",
         method: "post",
         data: {
-          date: this.form.date,
-          course_id: this.listQuery.course_id        }
+          date: this.Date,
+          course_id: this.listQuery.course_id
+        }
+      }).then(() => {
+        this.getList()
+        this.$message({
+          type: "success",
+          message: "操作成功!"
+        });
       })
-        .then(() => {
-          this.getList()
-          this.$message({
-            type: "success",
-            message: "操作成功!"
-          });
-        })
         .finally(() => {
           this.btnLoading = false;
         });

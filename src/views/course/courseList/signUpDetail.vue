@@ -37,26 +37,28 @@
               highlight-current-row>
       <el-table-column align="center"
                        label="序号"
-                       width="95">
+                       width="195">
         <template slot-scope="scope">
-          {{ scope.row.user.id }}
+          {{ scope.$index+1}}
         </template>
       </el-table-column>
       <el-table-column align="center"
-                       label="头像">
+                       label="头像"
+                       width="200">
         <template slot-scope="scope">
-          {{ scope.row.user.avatar }}
+          <img :src="scope.row.user.avatar"
+               class="user-avatar">
         </template>
       </el-table-column>
       <el-table-column label="昵称"
-                       width="110"
+                       width="200"
                        align="center">
         <template slot-scope="scope">
           <span>{{ scope.row.user.nickname }}</span>
         </template>
       </el-table-column>
       <el-table-column label="联系电话"
-                       width="110"
+                       width="220"
                        align="center">
         <template slot-scope="scope">
           {{ scope.row.user.phone }}
@@ -64,24 +66,24 @@
       </el-table-column>
       <el-table-column class-name="status-col"
                        label="姓名"
-                       width="110"
+                       width="200"
                        align="center">
         <template slot-scope="scope">
           <span>{{scope.row.user.name}}</span>
         </template>
       </el-table-column>
+
       <el-table-column align="center"
-                       label="报名时间"
-                       width="200">
+                       label="价格"
+                       width="220">
         <template slot-scope="scope">
-          <span>{{ scope.row.pay_datetime }}</span>
+          <span>{{ scope.row.price }}</span>
         </template>
       </el-table-column>
       <el-table-column align="center"
-                       label="价格"
-                       width="200">
+                       label="报名时间">
         <template slot-scope="scope">
-          <span>{{ scope.row.price }}</span>
+          <span>{{ scope.row.pay_datetime }}</span>
         </template>
       </el-table-column>
     </el-table>
@@ -156,3 +158,10 @@ export default {
   }
 }
 </script>
+<style scope>
+.user-avatar {
+  width: 90px;
+  height: 90px;
+  border-radius: 6px;
+}
+</style>

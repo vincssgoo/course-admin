@@ -42,9 +42,9 @@
               highlight-current-row>
       <el-table-column align="center"
                        label="序号"
-                       width="95">
+                       width="135">
         <template slot-scope="scope">
-          {{ scope.row.id }}
+          {{ scope.$index+1 }}
         </template>
       </el-table-column>
       <el-table-column align="center"
@@ -54,14 +54,14 @@
         </template>
       </el-table-column>
       <el-table-column label="结算时间段"
-                       width="110"
+                       width="250"
                        align="center">
         <template slot-scope="scope">
-          <span>{{ scope.row.start_date }} - {{scope.row.end_date}}</span>
+          <span>{{ scope.row.start_date }} ~ {{scope.row.end_date}}</span>
         </template>
       </el-table-column>
       <el-table-column label="金额"
-                       width="110"
+                       width="160"
                        align="center">
         <template slot-scope="scope">
           {{ scope.row.amount }}
@@ -69,7 +69,7 @@
       </el-table-column>
       <el-table-column class-name="status-col"
                        label="状态"
-                       width="110"
+                       width="160"
                        align="center">
         <template slot-scope="scope">
           <!-- <span>{{scope.row.status}}</span> -->

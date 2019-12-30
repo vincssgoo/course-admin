@@ -53,7 +53,7 @@
                         value-format="yyyy-MM-dd">
         </el-date-picker>
       </el-form-item>
-      <el-form-item label="上课时间点">
+      <!-- <el-form-item label="上课时间点">
         <el-time-picker v-model="form.start_time"
                         :picker-options="{
       selectableRange: '00:00:00 - 23:59:59'
@@ -67,6 +67,25 @@
     }"
                         placeholder="下课时间点">
         </el-time-picker>
+      </el-form-item> -->
+      <el-form-item label="开始时间:">
+        <el-time-select v-model="form.start_time"
+                        :picker-options="{
+start: '00:00',
+step: '00:30',
+end: '23:30'
+}"
+                        placeholder="任意时间点"></el-time-select>
+      </el-form-item>
+      <el-form-item label="结束时间:">
+        <el-time-select v-model="form.end_time"
+                        :picker-options="{
+start: '00:00',
+step: '00:30',
+end: '23:30',
+minTime: form.start_time
+}"
+                        placeholder="任意时间点"></el-time-select>
       </el-form-item>
       <el-form-item label="报名周期">
         <el-date-picker v-model="form.enroll_start_date"
@@ -208,10 +227,11 @@ export default {
       }).then(response => {
         // this.list = response.data.data;
         this.form = response.data
-        // console.log(this.form.start_time);
-        this.form.start_time = '2019-12-20T' + this.form.start_time + '.000Z'
-        this.form.end_time = '2019-12-20T' + this.form.end_time + '.000Z'
         console.log(this.form.start_time);
+        // this.form.start_time = '2019-12-28T' + this.form.start_time + '.000Z'
+        // this.form.end_time = '2019-12-28T' + this.form.end_time + '.000Z'
+        console.log(this.form.start_time);
+
 
       }).catch(err => {
         console.log(err);
@@ -329,10 +349,12 @@ export default {
         return;
       }
       // console.log(this.form.start_time);
-      // this.form.start_time = moment(this.form.start_time).format('h:mm:ss');
-      // this.form.end_time = moment(this.form.end_time).format('h:mm:ss');
+      // this.form.start_time = moment(this.form.start_time).format('H:m:s');
+      // this.form.end_time = moment(this.form.end_time).format('H:m:s');
       // console.log(this.form.start_time);
       this.btnLoading = true;
+      console.log(this.form);
+
       request({
         url: "/api/backend/course/store",
         method: "post",
@@ -346,6 +368,7 @@ export default {
             type: "success",
             message: "操作成功!"
           });
+          this.backIndex()
         })
         .finally(() => {
           this.btnLoading = false;

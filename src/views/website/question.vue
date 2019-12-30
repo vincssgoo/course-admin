@@ -15,7 +15,7 @@
                        label="序号"
                        width="95">
         <template slot-scope="scope">
-          {{ scope.row.id }}
+          {{ scope.$index+1 }}
         </template>
       </el-table-column>
       <el-table-column label="问题"
@@ -31,7 +31,8 @@
         </template>
       </el-table-column>
       <el-table-column label="权重"
-                       align="center">
+                       align="center"
+                       width="85">
         <template slot-scope="scope">
           {{ scope.row.weight }}
         </template>
@@ -40,10 +41,9 @@
                        width="230"
                        align="center">
         <template slot-scope="scope">
-          <el-button size="mini"
+          <el-button type="primary"
                      @click="handleEdit(scope.row)">修改</el-button>
-          <el-button size="mini"
-                     type="danger"
+          <el-button type="danger"
                      @click="handleDelete(scope.row)">删除</el-button>
         </template>
       </el-table-column>

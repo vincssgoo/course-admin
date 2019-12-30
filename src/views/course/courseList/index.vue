@@ -42,11 +42,12 @@
                        label="序号"
                        width="75">
         <template slot-scope="scope">
-          {{ scope.row.id }}
+          {{ scope.$index+1 }}
         </template>
       </el-table-column>
       <el-table-column label="图片"
-                       align="center">
+                       align="center"
+                       width="110">
         <template slot-scope="scope">
           <!-- {{ scope.row.image }} -->
           <img :src="scope.row.image"
@@ -55,8 +56,7 @@
         </template>
       </el-table-column>
       <el-table-column align="center"
-                       label="学校"
-                       width="75">
+                       label="学校">
         <template slot-scope="scope">
           <div v-if="scope.row.course_site != null && scope.row.course_type != null">
             {{ scope.row.course_site.name }}
@@ -68,7 +68,7 @@
       </el-table-column>
       <el-table-column align="center"
                        label="科目"
-                       width="75">
+                       width="130">
         <template slot-scope="scope">
           <div v-if="scope.row.course_site != null && scope.row.course_type != null">
             {{ scope.row.course_type.name }}
@@ -80,42 +80,42 @@
       </el-table-column>
       <el-table-column align="center"
                        label="名称"
-                       width="75">
+                       width="150">
         <template slot-scope="scope">
           {{ scope.row.title }}
         </template>
       </el-table-column>
       <el-table-column align="center"
                        label="价格"
-                       width="75">
+                       width="90">
         <template slot-scope="scope">
           {{ scope.row.price }}
         </template>
       </el-table-column>
       <el-table-column align="center"
                        label="限制人数"
-                       width="85">
+                       width="75">
         <template slot-scope="scope">
           {{ scope.row.volume }}
         </template>
       </el-table-column>
       <el-table-column align="center"
                        label="已报名人数"
-                       width="95">
+                       width="75">
         <template slot-scope="scope">
           {{ scope.row.enroll_amount }}
         </template>
       </el-table-column>
       <el-table-column align="center"
                        label="上课时间"
-                       width="85">
+                       width="165">
         <template slot-scope="scope">
           {{ scope.row.start_time }} - {{ scope.row.end_time }}
         </template>
       </el-table-column>
       <el-table-column align="center"
                        label="上课地点"
-                       width="85">
+                       width="170">
         <template slot-scope="scope">
           {{ scope.row.address_desc }}
         </template>
@@ -129,7 +129,7 @@
       </el-table-column>
       <el-table-column align="center"
                        label="状态"
-                       width="85">
+                       width="65">
         <template slot-scope="scope">
           <!-- {{ scope.row.sale_status }} -->
           <div v-if="scope.row.sale_status == '1' ">
@@ -147,19 +147,24 @@
                   style="">
           <div>
             <el-button size="mini"
-                       @click="handleEdit(scope.row)">修改</el-button>
+                       @click="handleEdit(scope.row)"
+                       type="primary">修改</el-button>
             <el-button v-if="scope.row.sale_status == '1' "
                        size="mini"
-                       @click="handleCourse(scope.row)">下架</el-button>
+                       @click="handleCourse(scope.row)"
+                       type="danger">下架</el-button>
             <el-button v-else
                        size="mini"
-                       @click="handleCourse(scope.row)">上架</el-button>
+                       @click="handleCourse(scope.row)"
+                       type="danger">上架</el-button>
           </div>
           <div style="margin-top:8px">
             <el-button size="mini"
-                       @click="goCourseTime(scope.row)">上课时间设置</el-button>
+                       @click="goCourseTime(scope.row)"
+                       type="info"> 上课时间设置</el-button>
             <el-button size="mini"
-                       @click="goSignUpDetail(scope.row)">报名详情</el-button>
+                       @click="goSignUpDetail(scope.row)"
+                       type="info">报名详情</el-button>
           </div>
 
         </template>
@@ -260,6 +265,7 @@ export default {
         this.listLoading = false;
         this.value = ""
         console.log(this.value);
+        console.log(this.list);
 
         // console.log(this.list);
         // this.listQuery.sale_status = ''
@@ -289,13 +295,41 @@ export default {
     //   this.listQuery.page = val;
     //   this.getList();
     // },
+    changeStatus (row) {
+      request({
+        url: "/api/backend/course/saleStatus",
+        method: "post",
+        data: { id: row.id }
+      }).then(response => {
+        if (row.sale_status == '1') {
+          row.sale_status = '2'
+        }
+        else if (row.sale_status == '2') {
+          row.sale_status = '1'
+        }
+        this.getList()
+      });
+    },
     handleCourse (row) {
-      if (row.sale_status == '1') {
-        row.sale_status = '2'
-      }
-      else if (row.sale_status == '2') {
-        row.sale_status = '1'
-      }
+
+      console.log(row.id);
+      this.$confirm('确定要改变课程状态吗?', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        // callback: action => {
+        //   // this.$message({
+        //   //   type: 'info',
+        //   //   message: `action: ${ action }`
+        //   // });
+        //   
+        // }
+      }).then(() => {
+        this.changeStatus(row)
+      }).catch(() => {
+
+      });
+
+
     },
     handleEdit (item) {
       // this.form = {
