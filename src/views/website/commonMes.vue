@@ -5,7 +5,8 @@
       <el-input type="textarea"
                 :rows="5"
                 placeholder="请输入内容"
-                v-model="form.notice">
+                v-model="form.notice"
+                style="width:70%">
       </el-input>
     </div>
     <div class="content">
@@ -14,14 +15,14 @@
       <tinymce :height="600"
                v-model="form.notes"
                :value="form.notes"
-               style="width:100%" />
+               style="width:70%" />
     </div>
     <div class="content">
       <span style="width:80px">关于我们</span>
       <tinymce :height="600"
                v-model="form.about_us"
                :value="form.about_us"
-               style="width:100%" />
+               style="width:70%" />
     </div>
     <div style="text-align:center">
       <el-button type="primary"

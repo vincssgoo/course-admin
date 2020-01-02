@@ -11,11 +11,13 @@
       <el-form-item label="名称">
         <el-input v-model="form.title"
                   placeholder="请输入名称"
+                  style="width:30%"
                   clearable />
       </el-form-item>
       <el-form-item label="价格">
         <el-input v-model="form.price"
                   placeholder="请输入价格"
+                  style="width:30%"
                   clearable />
       </el-form-item>
       <el-form-item label="学校">
@@ -39,6 +41,7 @@
       <el-form-item label="限制人数">
         <el-input v-model="form.volume"
                   placeholder="请输入限制人数"
+                  style="width:30%"
                   clearable />
       </el-form-item>
       <el-form-item label="课程周期">
@@ -68,7 +71,7 @@
                         placeholder="下课时间点">
         </el-time-picker>
       </el-form-item> -->
-      <el-form-item label="开始时间:">
+      <el-form-item label="上课开始时间:">
         <el-time-select v-model="form.start_time"
                         :picker-options="{
 start: '00:00',
@@ -77,7 +80,7 @@ end: '23:30'
 }"
                         placeholder="任意时间点"></el-time-select>
       </el-form-item>
-      <el-form-item label="结束时间:">
+      <el-form-item label="上课结束时间:">
         <el-time-select v-model="form.end_time"
                         :picker-options="{
 start: '00:00',
@@ -102,21 +105,27 @@ minTime: form.start_time
       <el-form-item label="上课详细地点">
         <el-input v-model="form.address_desc"
                   placeholder="请输入上课详细地点"
+                  style="width:50%"
                   clearable />
       </el-form-item>
       <el-form-item label="联系电话">
         <el-input v-model="form.phone"
                   placeholder="请输入联系电话"
+                  style="width:30%"
                   clearable />
       </el-form-item>
       <el-form-item label="经纬度">
-        <div v-if="form.latitude">{{form.latitude}},{{form.longitude}}</div>
+        <!-- <div v-if="form.latitude">{{form.latitude}},{{form.longitude}}</div>
         <div v-else>请在地图上选点，然后点击“选择该位置”按钮获取经纬度</div>
-        <div style="position: relative">
+
           <AMapPosition ref="map"
                         @choosePosition="choosePosition"
-                        :height="300"></AMapPosition>
-        </div>
+                        :height="300">
+
+          </AMapPosition> -->
+        <AMapPosition ref="map"
+                      @choosePosition="choosePosition"
+                      :height="300"></AMapPosition>
       </el-form-item>
       <el-form-item label="详细介绍">
         <tinymce :height="400"
@@ -175,6 +184,10 @@ export default {
       },
       btnLoading: false,
       listLoading: true,
+      mapQuery: {
+        key: '"e189ae2e6e040e0861df1281cb162f6b"',
+        Keyword: '',
+      },
     }
   },
   created () {
@@ -190,6 +203,17 @@ export default {
     // this.getSchoolList();
   },
   methods: {
+    search () {
+      request({
+        url: "https://restapi.amap.com/v3/place/text",
+        method: "get",
+        params: this.mapQuery
+      }).then(response => {
+        // console.log(234);
+        console.log(response);
+
+      });
+    },
     getLocationList () {
       // console.log(123);
 
@@ -266,8 +290,8 @@ export default {
     },
     choosePosition (res) {
       console.log(res);
-      this.form.latitude = res.position.lng;
-      this.form.longitude = res.position.lat;
+      this.form.latitude = res.position.lat;
+      this.form.longitude = res.position.lng;
     },
     saveData () {
       // this.form.school_id = this.school_id

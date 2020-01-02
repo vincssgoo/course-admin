@@ -57,7 +57,8 @@
         <el-form-item label="学校分点"
                       prop="name">
           <el-input v-model="form.name"
-                    placeholder="请输入学校分点名称" />
+                    placeholder="请输入学校分点名称"
+                    style="width:50%" />
         </el-form-item>
       </el-form>
       <div slot="footer"

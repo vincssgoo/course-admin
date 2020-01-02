@@ -58,7 +58,8 @@
     <el-dialog :visible.sync="dialogVisible"
                width="30%">
       <el-form>
-        <el-form-item label="时间">
+        <el-form-item label="时间"
+                      prop="selectTime">
 
           <el-date-picker v-model="form.date"
                           type="date"
@@ -87,6 +88,11 @@
                      :total="total">
       </el-pagination>
     </div>
+    <div style="text-align:center">
+      <el-button style="margin-top:100px"
+                 type="primary"
+                 @click="backIndex">返 回</el-button>
+    </div>
   </div>
 </template>
 
@@ -109,18 +115,32 @@ export default {
         end_date: '',
       },
       form: {
-        date: '',
+        date: null,
       },
       year: '',
       month: '',
       day: '',
-      Date: '',
+      Date: null,
+
     }
   },
   created () {
     this.getList()
   },
+  watch: {
+    dialogVisible (newVal, oldVal) {
+      // 编辑框一异隐藏，马上清除旧数据
+      if (newVal === false) {
+        this.form = {
+          date: null,
+        };
+      }
+    }
+  },
   methods: {
+    backIndex () {
+      this.$router.replace({ path: '/course/index' })
+    },
     getList () {
       this.listQuery.course_id = this.$route.query.course_id;
       this.listLoading = true;
@@ -177,6 +197,27 @@ export default {
       this.day = new Date(this.form.date).getDate()
       this.Date = this.year + '-' + this.month + '-' + this.day
       this.btnLoading = true;
+      for (let i = 0; i < this.list.length; i++) {
+        if (this.Date == this.list[i].date) {
+          this.$message({
+            type: "error",
+            message: '时间重复提交,请重新选择！'
+          });
+          this.Date = null
+          this.form.date = null
+          this.btnLoading = false;
+          return
+        }
+      }
+      if (this.form.date == null) {
+        this.$message({
+          type: "error",
+          message: '没有选择时间！'
+        });
+        this.btnLoading = false;
+        return
+      }
+
       request({
         url: "/api/backend/course/setCourseDate",
         method: "post",
@@ -194,6 +235,7 @@ export default {
         .finally(() => {
           this.btnLoading = false;
         });
+
     }
 
 

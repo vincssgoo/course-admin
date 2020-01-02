@@ -305,6 +305,21 @@ export const asyncRouterMap = [{
   },
 
   {
+    component: Layout,
+    path: '/detail',
+    name: 'Detail',
+    children: [{
+      path: '/detail',
+      component: () => import('@/views/finance/detail'),
+    }],
+
+    meta: {
+      title: '结算明细',
+      // icon: 'table'
+    },
+    hidden: true
+  },
+  {
     path: '/finance',
     component: Layout,
     // redirect: '/finance/table',
@@ -331,6 +346,16 @@ export const asyncRouterMap = [{
           // icon: 'table'
         }
       },
+      // {
+      //   path: 'detail',
+      //   name: 'Detail',
+      //   component: () => import('@/views/finance/detail'),
+      //   meta: {
+      //     title: '结算明细',
+      //     // icon: 'table'
+      //   },
+      //   // hidden: true
+      // },
 
     ]
   },

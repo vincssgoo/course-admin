@@ -90,8 +90,8 @@ export default {
       margin-top: 5px;
       position: relative;
       .user-avatar {
-        width: 60px;
-        height: 60px;
+        width: 40px;
+        height: 40px;
         border-radius: 6px;
       }
       .el-icon-caret-bottom {

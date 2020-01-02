@@ -94,14 +94,14 @@
       </el-table-column>
       <el-table-column align="center"
                        label="限制人数"
-                       width="75">
+                       width="85">
         <template slot-scope="scope">
           {{ scope.row.volume }}
         </template>
       </el-table-column>
       <el-table-column align="center"
                        label="已报名人数"
-                       width="75">
+                       width="95">
         <template slot-scope="scope">
           {{ scope.row.enroll_amount }}
         </template>

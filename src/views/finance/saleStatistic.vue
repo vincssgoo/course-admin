@@ -68,7 +68,7 @@
                        label="课程名称"
                        width="200">
         <template slot-scope="scope">
-          {{ scope.row.course.title }}
+          {{ scope.row.course_snap.title }}
         </template>
       </el-table-column>
       <el-table-column align="center"
@@ -146,9 +146,18 @@ export default {
         this.total = response.data.total;
         this.amount = response.data.order_amount;
         this.listLoading = false;
+        console.log(this.list);
+
       });
 
     },
   }
 }
 </script>
+<style rel="stylesheet/scss" lang="scss" scoped>
+.user-avatar {
+  width: 60px;
+  height: 60px;
+  border-radius: 6px;
+}
+</style>

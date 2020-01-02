@@ -57,7 +57,8 @@
         <el-form-item label="科目"
                       prop="name">
           <el-input v-model="form.name"
-                    placeholder="请输入科目名称" />
+                    placeholder="请输入科目名称"
+                    style="width:40%" />
         </el-form-item>
       </el-form>
       <div slot="footer"

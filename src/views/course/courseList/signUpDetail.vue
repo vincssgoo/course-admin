@@ -37,28 +37,28 @@
               highlight-current-row>
       <el-table-column align="center"
                        label="序号"
-                       width="195">
+                       width="85">
         <template slot-scope="scope">
           {{ scope.$index+1}}
         </template>
       </el-table-column>
       <el-table-column align="center"
                        label="头像"
-                       width="200">
+                       width="120">
         <template slot-scope="scope">
           <img :src="scope.row.user.avatar"
                class="user-avatar">
         </template>
       </el-table-column>
       <el-table-column label="昵称"
-                       width="200"
+                       width="140"
                        align="center">
         <template slot-scope="scope">
           <span>{{ scope.row.user.nickname }}</span>
         </template>
       </el-table-column>
       <el-table-column label="联系电话"
-                       width="220"
+                       width="180"
                        align="center">
         <template slot-scope="scope">
           {{ scope.row.user.phone }}
@@ -66,16 +66,39 @@
       </el-table-column>
       <el-table-column class-name="status-col"
                        label="姓名"
-                       width="200"
+                       width="120"
                        align="center">
         <template slot-scope="scope">
           <span>{{scope.row.user.name}}</span>
         </template>
       </el-table-column>
-
+      <el-table-column class-name="status-col"
+                       label="学校"
+                       width="180"
+                       align="center">
+        <template slot-scope="scope">
+          <span>{{scope.row.user.school}}</span>
+        </template>
+      </el-table-column>
+      <el-table-column class-name="status-col"
+                       label="班级"
+                       width="180"
+                       align="center">
+        <template slot-scope="scope">
+          <span>{{scope.row.user.class}}</span>
+        </template>
+      </el-table-column>
+      <el-table-column class-name="status-col"
+                       label="身份证号码"
+                       width="200"
+                       align="center">
+        <template slot-scope="scope">
+          <span>{{scope.row.user.id_card_number}}</span>
+        </template>
+      </el-table-column>
       <el-table-column align="center"
                        label="价格"
-                       width="220">
+                       width="120">
         <template slot-scope="scope">
           <span>{{ scope.row.price }}</span>
         </template>
