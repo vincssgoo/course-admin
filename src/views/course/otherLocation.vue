@@ -7,12 +7,22 @@
                  plain
                  style="float:right;"
                  icon="el-icon-search"
-                 @click="handleFilter">搜索</el-button>
+                 @click="handleFilter(fck)">搜索</el-button>
       <el-input placeholder="请输入学校名称"
                 v-model="listQuery.name"
                 style="width: 320px;float:right;"
                 clearable>
       </el-input>
+      <el-select v-model="fck"
+                 placeholder="类型"
+                 style="float:right;width:120px;margin-right:20px"
+                 clearable>
+        <el-option v-for="item in options"
+                   :key="item.value"
+                   :label="item.label"
+                   :value="item.value">
+        </el-option>
+      </el-select>
 
     </div>
     <el-table v-loading="listLoading"
@@ -23,9 +33,28 @@
               highlight-current-row>
       <el-table-column align="center"
                        label="序号"
-                       width="95">
+                       width="155">
         <template slot-scope="scope">
-          {{ scope.row.id }}
+          {{ scope.$index+1 }}
+        </template>
+      </el-table-column>
+      <el-table-column label="图片"
+                       align="center">
+        <template slot-scope="scope">
+          <img :src="scope.row.image"
+               class="fuk">
+        </template>
+      </el-table-column>
+      <el-table-column align="center"
+                       label="分点类型"
+                       width="255">
+        <template slot-scope="scope">
+          <div v-if="scope.row.type == '1'">
+            <span>中心校</span>
+          </div>
+          <div v-else-if="scope.row.type == '2'">
+            <span>基地校</span>
+          </div>
         </template>
       </el-table-column>
       <el-table-column label="分点名称"
@@ -38,10 +67,9 @@
                        width="230"
                        align="center">
         <template slot-scope="scope">
-          <el-button size="mini"
+          <el-button type="primary"
                      @click="handleEdit(scope.row)">修改</el-button>
-          <el-button size="mini"
-                     type="danger"
+          <el-button type="danger"
                      @click="handleDelete(scope.row)">删除</el-button>
         </template>
       </el-table-column>
@@ -58,8 +86,34 @@
         <el-form-item label="学校分点"
                       prop="name">
           <el-input v-model="form.name"
-                    placeholder="请输入学校分点名称" />
+                    placeholder="请输入学校分点名称"
+                    style="width:50%" />
         </el-form-item>
+        <el-form-item label="分点类型"
+                      prop="name">
+          <el-select v-model="fck"
+                     placeholder="请选择">
+            <el-option v-for="item in options"
+                       :key="item.value"
+                       :label="item.label"
+                       :value="item.value">
+            </el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item>
+          <div class="fck">
+            <div class="u">
+              <span>图片</span>
+              <span>(726 x 426)</span>
+            </div>
+
+            <upload-one v-model="form.image"
+                        style="margin-left:5px"></upload-one>
+
+          </div>
+
+        </el-form-item>
+
       </el-form>
       <div slot="footer"
            class="dialog-footer">
@@ -99,12 +153,23 @@ export default {
       listQuery: {
         page: 1,
         limit: 10,
-        name: ""
+        name: "",
+        type: '',
       },
       form: {
         id: "",
         name: "",
+        type: "",
+        image: '',
       },
+      options: [{
+        value: '选项1',
+        label: '中心校'
+      }, {
+        value: '选项2',
+        label: '基地校'
+      },], value: '',
+      fck: '',
     }
   },
   created () {
@@ -117,6 +182,8 @@ export default {
         this.form = {
           id: "",
           name: '',
+          type: '',
+          image: '',
         };
       }
     }
@@ -147,10 +214,20 @@ export default {
       this.getList();
     },
     handleEdit (item) {
+
       this.form = {
         id: item.id,
         name: item.name,
+        type: item.type,
+        image: item.image,
       };
+
+      if (this.form.type == '1') {
+        this.fck = '中心校'
+      }
+      else if (this.form.type == '2') {
+        this.fck = '基地校'
+      }
 
       this.dialogVisible = true;
     },
@@ -178,7 +255,13 @@ export default {
         });
       });
     },
-    handleFilter () {
+    handleFilter (value) {
+      if (value == '选项1') {
+        this.listQuery.type = '1'
+      }
+      else if (value == '选项2') {
+        this.listQuery.type = '2'
+      }
       this.listQuery.page = 1;
       this.getList();
     },
@@ -191,6 +274,16 @@ export default {
     // },
 
     saveData () {
+      console.log(this.fck);
+
+      if (this.fck == '选项1') {
+        this.form.type = '1'
+      }
+      else if (this.fck == '选项2') {
+        this.form.type = '2'
+      }
+      console.log(this.form.type);
+
       if (!this.form.name) {
         this.$message({
           type: "warning",
@@ -224,3 +317,18 @@ export default {
 }
 
 </script>
+<style>
+.fck {
+  display: flex;
+  flex-direction: row;
+  margin-left: -70px;
+}
+.u {
+  display: flex;
+  flex-direction: column;
+}
+.fuk {
+  width: 90px;
+  height: 90px;
+}
+</style>

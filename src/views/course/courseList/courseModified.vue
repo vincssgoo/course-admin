@@ -11,11 +11,13 @@
       <el-form-item label="名称">
         <el-input v-model="form.title"
                   placeholder="请输入名称"
+                  style="width:30%"
                   clearable />
       </el-form-item>
       <el-form-item label="价格">
         <el-input v-model="form.price"
                   placeholder="请输入价格"
+                  style="width:30%"
                   clearable />
       </el-form-item>
       <el-form-item label="学校">
@@ -39,6 +41,7 @@
       <el-form-item label="限制人数">
         <el-input v-model="form.volume"
                   placeholder="请输入限制人数"
+                  style="width:30%"
                   clearable />
       </el-form-item>
       <el-form-item label="课程周期">
@@ -53,7 +56,7 @@
                         value-format="yyyy-MM-dd">
         </el-date-picker>
       </el-form-item>
-      <el-form-item label="上课时间点">
+      <!-- <el-form-item label="上课时间点">
         <el-time-picker v-model="form.start_time"
                         :picker-options="{
       selectableRange: '00:00:00 - 23:59:59'
@@ -67,6 +70,25 @@
     }"
                         placeholder="下课时间点">
         </el-time-picker>
+      </el-form-item> -->
+      <el-form-item label="上课开始时间:">
+        <el-time-select v-model="form.start_time"
+                        :picker-options="{
+start: '00:00',
+step: '00:30',
+end: '23:30'
+}"
+                        placeholder="任意时间点"></el-time-select>
+      </el-form-item>
+      <el-form-item label="上课结束时间:">
+        <el-time-select v-model="form.end_time"
+                        :picker-options="{
+start: '00:00',
+step: '00:30',
+end: '23:30',
+minTime: form.start_time
+}"
+                        placeholder="任意时间点"></el-time-select>
       </el-form-item>
       <el-form-item label="报名周期">
         <el-date-picker v-model="form.enroll_start_date"
@@ -83,21 +105,27 @@
       <el-form-item label="上课详细地点">
         <el-input v-model="form.address_desc"
                   placeholder="请输入上课详细地点"
+                  style="width:50%"
                   clearable />
       </el-form-item>
       <el-form-item label="联系电话">
         <el-input v-model="form.phone"
                   placeholder="请输入联系电话"
+                  style="width:30%"
                   clearable />
       </el-form-item>
       <el-form-item label="经纬度">
         <div v-if="form.latitude">{{form.latitude}},{{form.longitude}}</div>
         <div v-else>请在地图上选点，然后点击“选择该位置”按钮获取经纬度</div>
-        <div style="position: relative">
-          <AMapPosition ref="map"
+
+        <!--  <AMapPosition ref="map"
                         @choosePosition="choosePosition"
-                        :height="300"></AMapPosition>
-        </div>
+                        :height="300">
+
+          </AMapPosition> -->
+        <AMapPosition ref="map"
+                      @choosePosition="choosePosition"
+                      :height="300"></AMapPosition>
       </el-form-item>
       <el-form-item label="详细介绍">
         <tinymce :height="400"
@@ -156,6 +184,10 @@ export default {
       },
       btnLoading: false,
       listLoading: true,
+      mapQuery: {
+        key: '"e189ae2e6e040e0861df1281cb162f6b"',
+        Keyword: '',
+      },
     }
   },
   created () {
@@ -171,6 +203,17 @@ export default {
     // this.getSchoolList();
   },
   methods: {
+    search () {
+      request({
+        url: "https://restapi.amap.com/v3/place/text",
+        method: "get",
+        params: this.mapQuery
+      }).then(response => {
+        // console.log(234);
+        console.log(response);
+
+      });
+    },
     getLocationList () {
       // console.log(123);
 
@@ -208,10 +251,11 @@ export default {
       }).then(response => {
         // this.list = response.data.data;
         this.form = response.data
-        // console.log(this.form.start_time);
-        this.form.start_time = '2019-12-20T' + this.form.start_time + '.000Z'
-        this.form.end_time = '2019-12-20T' + this.form.end_time + '.000Z'
         console.log(this.form.start_time);
+        // this.form.start_time = '2019-12-28T' + this.form.start_time + '.000Z'
+        // this.form.end_time = '2019-12-28T' + this.form.end_time + '.000Z'
+        console.log(this.form.start_time);
+
 
       }).catch(err => {
         console.log(err);
@@ -246,8 +290,8 @@ export default {
     },
     choosePosition (res) {
       console.log(res);
-      this.form.latitude = res.position.lng;
-      this.form.longitude = res.position.lat;
+      this.form.latitude = res.position.lat;
+      this.form.longitude = res.position.lng;
     },
     saveData () {
       // this.form.school_id = this.school_id
@@ -329,10 +373,12 @@ export default {
         return;
       }
       // console.log(this.form.start_time);
-      // this.form.start_time = moment(this.form.start_time).format('h:mm:ss');
-      // this.form.end_time = moment(this.form.end_time).format('h:mm:ss');
+      // this.form.start_time = moment(this.form.start_time).format('H:m:s');
+      // this.form.end_time = moment(this.form.end_time).format('H:m:s');
       // console.log(this.form.start_time);
       this.btnLoading = true;
+      console.log(this.form);
+
       request({
         url: "/api/backend/course/store",
         method: "post",
@@ -346,6 +392,7 @@ export default {
             type: "success",
             message: "操作成功!"
           });
+          this.backIndex()
         })
         .finally(() => {
           this.btnLoading = false;

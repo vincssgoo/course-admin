@@ -39,7 +39,7 @@
                        label="序号"
                        width="95">
         <template slot-scope="scope">
-          {{ scope.row.id }}
+          {{ scope.$index+1 }}
         </template>
       </el-table-column>
       <el-table-column align="center"
@@ -60,7 +60,7 @@
         </template>
       </el-table-column>
       <el-table-column label="联系电话"
-                       width="110"
+                       width="130"
                        align="center">
         <template slot-scope="scope">
           {{ scope.row.phone }}
@@ -68,7 +68,7 @@
       </el-table-column>
       <el-table-column class-name="status-col"
                        label="姓名"
-                       width="110"
+                       width="120"
                        align="center">
         <template slot-scope="scope">
           <span>{{scope.row.name}}</span>
@@ -76,7 +76,6 @@
       </el-table-column>
       <el-table-column class-name="status-col"
                        label="学校"
-                       width="110"
                        align="center">
         <template slot-scope="scope">
           <span>{{scope.row.school}}</span>
@@ -84,7 +83,7 @@
       </el-table-column>
       <el-table-column class-name="status-col"
                        label="班级"
-                       width="110"
+                       width="160"
                        align="center">
         <template slot-scope="scope">
           <span>{{scope.row.class}}</span>
@@ -92,6 +91,7 @@
       </el-table-column>
       <el-table-column class-name="status-col"
                        label="身份证号码"
+                       width="200"
                        align="center">
         <template slot-scope="scope">
           <span>{{scope.row.id_card_number}}</span>
@@ -101,7 +101,7 @@
                        label="注册时间"
                        width="200">
         <template slot-scope="scope">
-          <span>{{ scope.row.create_at }}</span>
+          <span>{{ scope.row.created_at }}</span>
         </template>
       </el-table-column>
     </el-table>

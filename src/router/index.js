@@ -65,7 +65,10 @@ export default new Router({
 //异步挂载的路由
 //动态需要根据权限加载的路由表
 //meta无permissions字段则不做权限控制
-export const asyncRouterMap = [{
+export const asyncRouterMap = [
+
+
+  {
     path: '/user',
     component: Layout,
     alwaysShow: true,
@@ -239,26 +242,6 @@ export const asyncRouterMap = [{
           title: '轮播图管理',
           // icon: 'table'
         },
-        // redirect: '/website/banner/websiteModified',
-        // children: [{
-        //     path: 'index',
-        //     name: 'Index',
-        //     component: () => import('@/views/website/banner/index'),
-        //     meta: {
-        //       title: '轮播图管理',
-        //       // icon: 'table'
-        //     }
-        //   },
-        //   {
-        //     path: 'websiteModified',
-        //     name: 'WebsiteModified',
-        //     component: () => import('@/views/website/banner/websiteModified'),
-        //     meta: {
-        //       title: '新增、修改',
-        //       // icon: 'table'
-        //     }
-        //   }
-        // ]
       },
       {
         path: 'question',
@@ -272,6 +255,9 @@ export const asyncRouterMap = [{
       }
     ]
   },
+
+
+
 
   {
     component: Layout,
@@ -305,6 +291,21 @@ export const asyncRouterMap = [{
   },
 
   {
+    component: Layout,
+    path: '/detail',
+    name: 'Detail',
+    children: [{
+      path: '/detail',
+      component: () => import('@/views/finance/detail'),
+    }],
+
+    meta: {
+      title: '结算明细',
+      // icon: 'table'
+    },
+    hidden: true
+  },
+  {
     path: '/finance',
     component: Layout,
     // redirect: '/finance/table',
@@ -331,8 +332,59 @@ export const asyncRouterMap = [{
           // icon: 'table'
         }
       },
+      // {
+      //   path: 'detail',
+      //   name: 'Detail',
+      //   component: () => import('@/views/finance/detail'),
+      //   meta: {
+      //     title: '结算明细',
+      //     // icon: 'table'
+      //   },
+      //   // hidden: true
+      // },
 
     ]
+  },
+  {
+    path: '/school',
+    alwaysShow: true,
+    component: Layout,
+    // redirect: '/website/commonMes',
+    name: 'School',
+    meta: {
+      title: '学校管理',
+      // icon: 'jianzhan'
+      icon: 'school'
+    },
+    children: [{
+      path: 'index',
+      name: 'Index',
+      component: () => import('@/views/school/index'),
+      meta: {
+        title: '学校列表',
+
+      }
+    }]
+  },
+  {
+    path: '/class',
+    alwaysShow: true,
+    component: Layout,
+    // redirect: '/website/commonMes',
+    name: 'Class',
+    meta: {
+      title: '班级管理',
+      icon: 'class'
+    },
+    children: [{
+      path: 'index',
+      name: 'Index',
+      component: () => import('@/views/class/index'),
+      meta: {
+        title: '班级列表',
+        // icon: 'table'
+      }
+    }]
   },
   {
     path: '*',

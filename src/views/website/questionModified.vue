@@ -7,20 +7,23 @@
         <el-input type="textarea"
                   :rows="5"
                   placeholder="请输入问题"
-                  v-model="form.title">
+                  v-model="form.title"
+                  style="width:70%">
         </el-input>
       </el-form-item>
       <el-form-item label="答案">
         <el-input type="textarea"
                   :rows="5"
                   placeholder="请输入答案"
-                  v-model="form.content">
+                  v-model="form.content"
+                  style="width:70%">
         </el-input>
       </el-form-item>
       <el-form-item label="权重">
         <el-input type="number"
                   placeholder="请输入权重"
                   v-model="form.weight"
+                  style="width:70%"
                   clearable></el-input>
       </el-form-item>
     </el-form>

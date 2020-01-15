@@ -7,10 +7,11 @@
                  plain
                  style="float:right;"
                  icon="el-icon-search"
-                 @click="handleFilter">搜索</el-button>
-      <el-input placeholder="请输入名称"
-                v-model="listQuery.name"
-                style="width: 320px;float:right;"
+                 @click="handleFilter(value)">搜索</el-button>
+
+      <el-input placeholder="请输入学校名称"
+                v-model="listQuery.keyword"
+                style="width: 320px;float:right;margin-right:20px"
                 clearable>
       </el-input>
 
@@ -23,42 +24,45 @@
               highlight-current-row>
       <el-table-column align="center"
                        label="序号"
-                       width="95">
+                       width="155">
         <template slot-scope="scope">
           {{ scope.$index+1 }}
         </template>
       </el-table-column>
-      <el-table-column label="科目"
-                       align="center">
+
+      <el-table-column align="center"
+                       label="学校">
         <template slot-scope="scope">
           {{ scope.row.name }}
         </template>
       </el-table-column>
       <el-table-column label="操作"
-                       width="230"
+                       width="250"
                        align="center">
-        <template slot-scope="scope">
-          <el-button type="primary"
-                     @click="handleEdit(scope.row)">修改</el-button>
-          <el-button type="danger"
-                     @click="handleDelete(scope.row)">删除</el-button>
+        <template slot-scope="scope"
+                  style="">
+          <div>
+            <el-button @click="handleEdit(scope.row)"
+                       type="primary">修改</el-button>
+            <el-button @click="handleDelete(scope.row)"
+                       type="danger">删除</el-button>
+          </div>
+
         </template>
       </el-table-column>
 
     </el-table>
-
-    <el-dialog :close-on-click-modal="false"
-               :visible.sync="dialogVisible"
-               width="50%">
+    <el-dialog :visible.sync="dialogVisible"
+               :close-on-click-modal="false">
       <el-form ref="form"
                :model="form"
                label-position="left"
                label-width="70px">
-        <el-form-item label="科目"
+        <el-form-item label="学校名称"
                       prop="name">
           <el-input v-model="form.name"
-                    placeholder="请输入科目名称"
-                    style="width:40%" />
+                    placeholder="请输入学校名称"
+                    style="width:50%" />
         </el-form-item>
       </el-form>
       <div slot="footer"
@@ -69,42 +73,29 @@
                    :loading="btnLoading">确定</el-button>
       </div>
     </el-dialog>
-    <div class="block"
-         style="margin-top:25px">
-      <!-- <span class="demonstration">完整功能</span> -->
-      <el-pagination @size-change="handleSizeChange"
-                     @current-change="handleCurrentChange"
-                     :current-page="listQuery.page"
-                     :page-sizes="[5, 10, 20, 50,100]"
-                     :page-size="listQuery.limit"
-                     layout="total, sizes, prev, pager, next, jumper"
-                     :total="total">
-      </el-pagination>
-    </div>
+    <!-- <router-view /> -->
   </div>
 </template>
-
 <script>
 import request from "@/utils/request";
 
 export default {
-
   data () {
     return {
+      isSale: false,
       total: null,
       list: null,
+      list_type: null,
       listLoading: true,
       btnLoading: false,
       dialogVisible: false,
       listQuery: {
-        page: 1,
-        limit: 10,
-        name: ""
+        keyword: '',
       },
       form: {
-        id: "",
-        name: "",
-      },
+        id: '',
+        name: '',
+      }
     }
   },
   created () {
@@ -122,52 +113,18 @@ export default {
     }
   },
   methods: {
-    getList () {
-      console.log(123);
-
-      this.listLoading = true;
-      request({
-        url: "/api/backend/courseType/index",
-        method: "get",
-        params: this.listQuery
-      }).then(response => {
-        this.list = response.data.data;
-        this.total = response.data.total;
-        this.listLoading = false;
-        console.log(this.list);
-
-      });
-    },
-    handleSizeChange (val) {
-      this.listQuery.limit = val;
-      this.getList();
-    },
-    handleCurrentChange (val) {
-      this.listQuery.page = val;
-      this.getList();
-    },
-    handleEdit (item) {
-      this.form = {
-        id: item.id,
-        name: item.name,
-      };
-
-      this.dialogVisible = true;
-    },
     handleDelete (row) {
-      this.$confirm("确定要删除科目吗？", "提示", {
+      this.$confirm("确定要删除该学校吗？", "提示", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
         type: "warning"
       }).then(() => {
-        console.log(1234);
         request({
-          url: "/api/backend/courseType/delete",
+          url: "/api/backend/school/delete",
           method: "post",
           data: { id: row.id },
         }).then(() => {
           console.log(123);
-
           // 删除最后一条数据时无数据问题
           this.list.length <= 1 ? this.listQuery.page-- : false;
           this.getList();
@@ -178,7 +135,31 @@ export default {
         });
       });
     },
-    handleFilter () {
+    getList () {
+      this.listLoading = true;
+      request({
+        url: "/api/backend/school/index",
+        method: "get",
+        params: this.listQuery
+      }).then(response => {
+        this.list = response.data.data;
+        this.listLoading = false;
+        console.log(this.list);
+
+        // console.log(this.list);
+        // this.listQuery.sale_status = ''
+      });
+
+    },
+    handleEdit (item) {
+      this.form = {
+        id: item.id,
+        name: item.name,
+      };
+
+      this.dialogVisible = true;
+    },
+    handleFilter (value) {
       this.listQuery.page = 1;
       this.getList();
     },
@@ -193,7 +174,7 @@ export default {
 
       this.btnLoading = true;
       request({
-        url: "/api/backend/courseType/store",
+        url: "/api/backend/school/store",
         method: "post",
         data: this.form
       })
@@ -210,7 +191,17 @@ export default {
           this.btnLoading = false;
         });
     },
+  },
 
-  }
+
 }
+
 </script>
+
+<style scope>
+.user-avatar {
+  width: 60px;
+  height: 60px;
+  border-radius: 6px;
+}
+</style>

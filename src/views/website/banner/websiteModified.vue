@@ -3,14 +3,27 @@
     <el-form ref="form"
              :model="form"
              label-width="120px">
-      <el-form-item label="图片">
-        <upload-one v-model="form.image"></upload-one>
+      <el-form-item>
+        <div class="content">
+          <div class="bili">
+            <span>图片</span>
+            <span>(690 x 290)</span>
+          </div>
+          <upload-one v-model="form.image">
+          </upload-one>
+        </div>
+
       </el-form-item>
-      <el-form-item label="权重">
-        <el-input type="number"
-                  placeholder="请输入权重"
-                  v-model="form.weight"
-                  clearable></el-input>
+      <el-form-item>
+        <div class="weight">
+          <span>权重</span>
+          <el-input type="number"
+                    placeholder="请输入权重"
+                    v-model="form.weight"
+                    style="width:30%"
+                    clearable></el-input>
+        </div>
+
       </el-form-item>
     </el-form>
     <div style="text-align:center;margin-top:200px">
@@ -87,3 +100,28 @@ export default {
   }
 }
 </script>
+<style>
+body {
+  margin: 0;
+  padding: 0;
+}
+.content {
+  display: flex;
+  flex-direction: row;
+}
+.bili {
+  display: flex;
+  flex-direction: column;
+}
+.bili > span {
+  margin-right: 20px;
+}
+.weight {
+  display: flex;
+  flex-direction: row;
+}
+.weight > span {
+  margin-right: 42px;
+  width: 50px;
+}
+</style>

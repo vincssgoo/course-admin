@@ -14,11 +14,6 @@
                       placeholder="结束日期时间"
                       value-format="yyyy-MM-dd">
       </el-date-picker>
-      <el-input placeholder="请输入用户名/电话"
-                v-model="listQuery.keyword"
-                style="width: 320px;"
-                clearable>
-      </el-input>
       <el-button type="primary"
                  plain
                  style="float:right;"
@@ -36,9 +31,9 @@
               highlight-current-row>
       <el-table-column align="center"
                        label="序号"
-                       width="95">
+                       width="125">
         <template slot-scope="scope">
-          {{ scope.row.id}}
+          {{ scope.$index+1}}
         </template>
       </el-table-column>
       <el-table-column align="center"
@@ -48,34 +43,37 @@
         </template>
       </el-table-column>
       <el-table-column label="昵称"
-                       width="110"
+                       width="150"
                        align="center">
         <template slot-scope="scope">
           <span>{{ scope.row.user.nickname }}</span>
         </template>
       </el-table-column>
       <el-table-column align="center"
-                       label="头像">
+                       label="头像"
+                       width="150">
         <template slot-scope="scope">
           <img :src="scope.row.user.avatar"
                class="user-avatar">
         </template>
       </el-table-column>
       <el-table-column label="联系电话"
-                       width="110"
+                       width="200"
                        align="center">
         <template slot-scope="scope">
           {{ scope.row.user.phone }}
         </template>
       </el-table-column>
       <el-table-column align="center"
-                       label="课程名称">
+                       label="课程名称"
+                       width="200">
         <template slot-scope="scope">
-          {{ scope.row.course.title }}
+          {{ scope.row.course_snap.title }}
         </template>
       </el-table-column>
       <el-table-column align="center"
-                       label="价格">
+                       label="价格"
+                       width="150">
         <template slot-scope="scope">
           {{ scope.row.price }}
         </template>
@@ -148,9 +146,18 @@ export default {
         this.total = response.data.total;
         this.amount = response.data.order_amount;
         this.listLoading = false;
+        console.log(this.list);
+
       });
 
     },
   }
 }
 </script>
+<style rel="stylesheet/scss" lang="scss" scoped>
+.user-avatar {
+  width: 60px;
+  height: 60px;
+  border-radius: 6px;
+}
+</style>

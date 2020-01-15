@@ -10,15 +10,26 @@
                  @click="handleFilter(value)">搜索</el-button>
       <el-select v-model="listQuery.type_id"
                  placeholder="科目"
-                 style="float:right;width:120px;margin-right:20px">
+                 style="float:right;width:120px;margin-right:20px"
+                 clearable>
         <el-option v-for="item in list_type"
+                   :label="item.name"
+                   :value="item.id">
+        </el-option>
+      </el-select>
+      <el-select v-model="listQuery.site_id"
+                 placeholder="学校"
+                 style="float:right;width:120px;margin-right:20px"
+                 clearable>
+        <el-option v-for="item in site_type"
                    :label="item.name"
                    :value="item.id">
         </el-option>
       </el-select>
       <el-select v-model="value"
                  placeholder="状态"
-                 style="float:right;width:120px;margin-right:20px">
+                 style="float:right;width:120px;margin-right:20px"
+                 clearable>
         <el-option v-for="item in options"
                    :key="item.value"
                    :label="item.label"
@@ -42,11 +53,12 @@
                        label="序号"
                        width="75">
         <template slot-scope="scope">
-          {{ scope.row.id }}
+          {{ scope.$index+1 }}
         </template>
       </el-table-column>
       <el-table-column label="图片"
-                       align="center">
+                       align="center"
+                       width="110">
         <template slot-scope="scope">
           <!-- {{ scope.row.image }} -->
           <img :src="scope.row.image"
@@ -55,8 +67,7 @@
         </template>
       </el-table-column>
       <el-table-column align="center"
-                       label="学校"
-                       width="75">
+                       label="学校">
         <template slot-scope="scope">
           <div v-if="scope.row.course_site != null && scope.row.course_type != null">
             {{ scope.row.course_site.name }}
@@ -68,7 +79,7 @@
       </el-table-column>
       <el-table-column align="center"
                        label="科目"
-                       width="75">
+                       width="130">
         <template slot-scope="scope">
           <div v-if="scope.row.course_site != null && scope.row.course_type != null">
             {{ scope.row.course_type.name }}
@@ -80,14 +91,14 @@
       </el-table-column>
       <el-table-column align="center"
                        label="名称"
-                       width="75">
+                       width="150">
         <template slot-scope="scope">
           {{ scope.row.title }}
         </template>
       </el-table-column>
       <el-table-column align="center"
                        label="价格"
-                       width="75">
+                       width="90">
         <template slot-scope="scope">
           {{ scope.row.price }}
         </template>
@@ -108,14 +119,14 @@
       </el-table-column>
       <el-table-column align="center"
                        label="上课时间"
-                       width="85">
+                       width="165">
         <template slot-scope="scope">
           {{ scope.row.start_time }} - {{ scope.row.end_time }}
         </template>
       </el-table-column>
       <el-table-column align="center"
                        label="上课地点"
-                       width="85">
+                       width="170">
         <template slot-scope="scope">
           {{ scope.row.address_desc }}
         </template>
@@ -129,7 +140,7 @@
       </el-table-column>
       <el-table-column align="center"
                        label="状态"
-                       width="85">
+                       width="65">
         <template slot-scope="scope">
           <!-- {{ scope.row.sale_status }} -->
           <div v-if="scope.row.sale_status == '1' ">
@@ -147,19 +158,24 @@
                   style="">
           <div>
             <el-button size="mini"
-                       @click="handleEdit(scope.row)">修改</el-button>
+                       @click="handleEdit(scope.row)"
+                       type="primary">修改</el-button>
             <el-button v-if="scope.row.sale_status == '1' "
                        size="mini"
-                       @click="handleCourse(scope.row)">下架</el-button>
+                       @click="handleCourse(scope.row)"
+                       type="danger">下架</el-button>
             <el-button v-else
                        size="mini"
-                       @click="handleCourse(scope.row)">上架</el-button>
+                       @click="handleCourse(scope.row)"
+                       type="danger">上架</el-button>
           </div>
           <div style="margin-top:8px">
             <el-button size="mini"
-                       @click="goCourseTime(scope.row)">上课时间设置</el-button>
+                       @click="goCourseTime(scope.row)"
+                       type="warning"> 上课时间设置</el-button>
             <el-button size="mini"
-                       @click="goSignUpDetail(scope.row)">报名详情</el-button>
+                       @click="goSignUpDetail(scope.row)"
+                       type="success">报名详情</el-button>
           </div>
 
         </template>
@@ -171,6 +187,18 @@
 
     </el-dialog>
     <!-- <router-view /> -->
+    <div class="block"
+         style="margin-top:25px">
+      <!-- <span class="demonstration">完整功能</span> -->
+      <el-pagination @size-change="handleSizeChange"
+                     @current-change="handleCurrentChange"
+                     :current-page="listQuery.page"
+                     :page-sizes="[5, 10, 20, 50,100]"
+                     :page-size="listQuery.limit"
+                     layout="total, sizes, prev, pager, next, jumper"
+                     :total="total">
+      </el-pagination>
+    </div>
   </div>
 </template>
 <script>
@@ -183,13 +211,17 @@ export default {
       total: null,
       list: null,
       list_type: null,
+      site_type: null,
       listLoading: true,
       btnLoading: false,
       dialogVisible: false,
       listQuery: {
+        page: 1,
+        limit: 5,
         keyword: '',
         sale_status: '',
         type_id: '',
+        site_id: '',
       },
       options: [{
         value: '选项1',
@@ -223,6 +255,7 @@ export default {
   created () {
     this.getList();
     this.getTypeList();
+    this.getSiteList();
   },
   // watch: {
   //   dialogVisible (newVal, oldVal) {
@@ -236,6 +269,14 @@ export default {
   //   }
   // },
   methods: {
+    handleSizeChange (val) {
+      this.listQuery.limit = val;
+      this.getList();
+    },
+    handleCurrentChange (val) {
+      this.listQuery.page = val;
+      this.getList();
+    },
     getTypeList () {
       // console.log(123);
 
@@ -249,6 +290,19 @@ export default {
         this.list_type = response.data.data;
       });
     },
+    getSiteList () {
+      // console.log(123);
+
+      this.listLoading = true;
+      request({
+        url: "/api/backend/courseSite/index",
+        method: "get",
+        // params: this.listQuery
+      }).then(response => {
+        // console.log(234);
+        this.site_type = response.data.data;
+      });
+    },
     getList () {
       this.listLoading = true;
       request({
@@ -258,8 +312,10 @@ export default {
       }).then(response => {
         this.list = response.data.data;
         this.listLoading = false;
+        this.total = response.data.total;
         this.value = ""
         console.log(this.value);
+        console.log(this.list);
 
         // console.log(this.list);
         // this.listQuery.sale_status = ''
@@ -278,8 +334,14 @@ export default {
       })
     },
     goSignUpDetail (row) {
-      this.$router.replace({        path: '/signUpDetail',
-        query: { id: row.id }      })
+      this.$router.replace({
+        path: '/signUpDetail',
+        query: {
+          id: row.id,
+          title: row.title,
+          school: row.course_site.name
+        }
+      })
     },
     // handleSizeChange (val) {
     //   this.listQuery.limit = val;
@@ -289,13 +351,41 @@ export default {
     //   this.listQuery.page = val;
     //   this.getList();
     // },
+    changeStatus (row) {
+      request({
+        url: "/api/backend/course/saleStatus",
+        method: "post",
+        data: { id: row.id }
+      }).then(response => {
+        if (row.sale_status == '1') {
+          row.sale_status = '2'
+        }
+        else if (row.sale_status == '2') {
+          row.sale_status = '1'
+        }
+        this.getList()
+      });
+    },
     handleCourse (row) {
-      if (row.sale_status == '1') {
-        row.sale_status = '2'
-      }
-      else if (row.sale_status == '2') {
-        row.sale_status = '1'
-      }
+
+      console.log(row.id);
+      this.$confirm('确定要改变课程状态吗?', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        // callback: action => {
+        //   // this.$message({
+        //   //   type: 'info',
+        //   //   message: `action: ${ action }`
+        //   // });
+        //   
+        // }
+      }).then(() => {
+        this.changeStatus(row)
+      }).catch(() => {
+
+      });
+
+
     },
     handleEdit (item) {
       // this.form = {

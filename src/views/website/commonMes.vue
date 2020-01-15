@@ -5,24 +5,24 @@
       <el-input type="textarea"
                 :rows="5"
                 placeholder="请输入内容"
-                v-model="form.notice">
+                v-model="form.notice"
+                style="width:70%">
       </el-input>
     </div>
     <div class="content">
       <span style="width:80px">报名须知</span>
-      <el-input type="textarea"
-                :rows="5"
-                placeholder="请输入内容"
-                v-model="form.notes">
-      </el-input>
+
+      <tinymce :height="600"
+               v-model="form.notes"
+               :value="form.notes"
+               style="width:70%" />
     </div>
     <div class="content">
       <span style="width:80px">关于我们</span>
-      <el-input type="textarea"
-                :rows="5"
-                placeholder="请输入内容"
-                v-model="form.about_us">
-      </el-input>
+      <tinymce :height="600"
+               v-model="form.about_us"
+               :value="form.about_us"
+               style="width:70%" />
     </div>
     <div style="text-align:center">
       <el-button type="primary"
@@ -35,7 +35,7 @@
 
 <script>
 import request from "@/utils/request";
-
+import Tinymce from '@/components/Tinymce'
 export default {
   data () {
     return {
@@ -48,6 +48,9 @@ export default {
         about_us: '',
       }
     }
+  },
+  components: {
+    Tinymce
   },
   created () {
     this.getList()
@@ -99,5 +102,11 @@ export default {
   display: flex;
   flex-wrap: nowrap;
   margin-bottom: 60px;
+}
+.app-container {
+  /* display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center; */
 }
 </style>
