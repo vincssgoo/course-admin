@@ -43,6 +43,7 @@
       <el-table-column align="center"
                        label="分点名称">
         <template slot-scope="scope">
+<<<<<<< HEAD
 
           <div v-if="scope.row.course_site==null">
 
@@ -50,6 +51,9 @@
           <div v-else>
             {{ scope.row.course_site.name }}
           </div>
+=======
+          {{ scope.row.course_site.name }}
+>>>>>>> origin/master
         </template>
       </el-table-column>
       <el-table-column label="金额"

@@ -172,10 +172,17 @@
           <div style="margin-top:8px">
             <el-button size="mini"
                        @click="goCourseTime(scope.row)"
+<<<<<<< HEAD
                        type="warning"> 上课时间设置</el-button>
             <el-button size="mini"
                        @click="goSignUpDetail(scope.row)"
                        type="success">报名详情</el-button>
+=======
+                       type="info"> 上课时间设置</el-button>
+            <el-button size="mini"
+                       @click="goSignUpDetail(scope.row)"
+                       type="info">报名详情</el-button>
+>>>>>>> origin/master
           </div>
 
         </template>

@@ -115,10 +115,14 @@ minTime: form.start_time
                   clearable />
       </el-form-item>
       <el-form-item label="经纬度">
-        <div v-if="form.latitude">{{form.latitude}},{{form.longitude}}</div>
+        <!-- <div v-if="form.latitude">{{form.latitude}},{{form.longitude}}</div>
         <div v-else>请在地图上选点，然后点击“选择该位置”按钮获取经纬度</div>
 
+<<<<<<< HEAD
         <!--  <AMapPosition ref="map"
+=======
+          <AMapPosition ref="map"
+>>>>>>> origin/master
                         @choosePosition="choosePosition"
                         :height="300">
 

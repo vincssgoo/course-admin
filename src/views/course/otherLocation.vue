@@ -36,6 +36,7 @@
                        width="155">
         <template slot-scope="scope">
           {{ scope.$index+1 }}
+<<<<<<< HEAD
         </template>
       </el-table-column>
       <el-table-column label="图片"
@@ -55,6 +56,8 @@
           <div v-else-if="scope.row.type == '2'">
             <span>基地校</span>
           </div>
+=======
+>>>>>>> origin/master
         </template>
       </el-table-column>
       <el-table-column label="分点名称"
