@@ -1,32 +1,24 @@
 <template>
-  <el-menu class="navbar"
-           mode="horizontal">
-    <hamburger :toggle-click="toggleSideBar"
-               :is-active="sidebar.opened"
-               class="hamburger-container" />
+  <el-menu class="navbar" mode="horizontal">
+    <hamburger :toggle-click="toggleSideBar" :is-active="sidebar.opened" class="hamburger-container"/>
     <breadcrumb />
-    <el-dropdown class="avatar-container"
-                 trigger="click">
+    <el-dropdown class="avatar-container" trigger="click">
       <div class="avatar-wrapper">
         <!-- <img :src="avatar+'?imageView2/1/w/80/h/80'" class="user-avatar"> -->
-        <img src="@/assets/avatar.gif"
-             class="user-avatar">
-        <i class="el-icon-caret-bottom" />
+        <img src="@/assets/avatar.gif" class="user-avatar">
+        <i class="el-icon-caret-bottom"/>
       </div>
-      <el-dropdown-menu slot="dropdown"
-                        class="user-dropdown">
+      <el-dropdown-menu slot="dropdown" class="user-dropdown">
         <el-dropdown-item disabled>
           {{ username }}
         </el-dropdown-item>
-        <router-link class="inlineBlock"
-                     to="/info">
+        <router-link class="inlineBlock" to="/info">
           <el-dropdown-item divided>
             修改密码
           </el-dropdown-item>
         </router-link>
         <el-dropdown-item>
-          <span style="display:block;"
-                @click="logout">退出登录</span>
+          <span style="display:block;" @click="logout">退出登录</span>
         </el-dropdown-item>
       </el-dropdown-menu>
     </el-dropdown>
@@ -51,10 +43,10 @@ export default {
     ])
   },
   methods: {
-    toggleSideBar () {
+    toggleSideBar() {
       this.$store.dispatch('ToggleSideBar')
     },
-    logout () {
+    logout() {
       this.$store.dispatch('FedLogOut').then(() => {
         location.reload() // 为了重新实例化vue-router对象 避免bug
       })
@@ -92,7 +84,7 @@ export default {
       .user-avatar {
         width: 40px;
         height: 40px;
-        border-radius: 6px;
+        border-radius: 10px;
       }
       .el-icon-caret-bottom {
         position: absolute;

@@ -56,11 +56,7 @@
         </template>
       </el-table-column>
       <el-table-column label="总金额"
-<<<<<<< HEAD
                        width="160"
-=======
-                       width="260"
->>>>>>> origin/master
                        align="center">
         <template slot-scope="scope">
           {{ scope.row.amount }}
