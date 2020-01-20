@@ -89,7 +89,7 @@ export default {
       //AMAP地图
       amapManager,
       // zoom: 12,
-      center: [26.3318960, 115.3648660],
+      center: [115.3648660, 26.3318960],
       positionResult: null,
       events: {
         init: (map) => {
