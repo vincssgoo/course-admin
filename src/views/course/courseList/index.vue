@@ -172,17 +172,10 @@
           <div style="margin-top:8px">
             <el-button size="mini"
                        @click="goCourseTime(scope.row)"
-<<<<<<< HEAD
                        type="warning"> 上课时间设置</el-button>
             <el-button size="mini"
                        @click="goSignUpDetail(scope.row)"
                        type="success">报名详情</el-button>
-=======
-                       type="info"> 上课时间设置</el-button>
-            <el-button size="mini"
-                       @click="goSignUpDetail(scope.row)"
-                       type="info">报名详情</el-button>
->>>>>>> origin/master
           </div>
 
         </template>
@@ -395,30 +388,7 @@ export default {
 
     },
     handleEdit (item) {
-      // this.form = {
-      //   id: item.id,
-      //   name: item.name,
-      //   title: item.title,
-      //   image: item.image,
-      //   price: item.price,
-      //   volume: item.volume,
-      //   site_id: item.site_id,
-      //   type_id: item.type_id,
-      //   start_time: item.start_time,
-      //   end_time: item.end_time,
-      //   start_date: item.start_date,
-      //   end_date: item.end_date,
-      //   address_desc: item.address_desc,
-      //   latitude:item.latitude,
-      //   longitude: item.longitude,
-      //   desc: item.desc,
-      //   enroll_start_date: item.enroll_start_date,
-      //   enroll_end_date: item.enroll_end_date,
-      //   phone: item.phone,
-      // };
-      // console.log(item);
 
-      // this.dialogVisible = true;
       this.$router.replace({
         path: '/courseModified',
         query: { id: item.id }

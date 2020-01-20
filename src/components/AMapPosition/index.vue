@@ -40,6 +40,7 @@
             <el-col :span="5">经纬度：</el-col>
             <el-col :span="18">
               {{ positionResult ? positionResult.position.lat + ',' + positionResult.position.lng : '' }}
+              <!-- {{ pos ? pos.position.lat + ',' + pos.position.lng : '' }} -->
             </el-col>
           </el-row>
           <el-row class="card-body-item">
@@ -74,14 +75,21 @@ export default {
     choosePosition: {
       type: Function,
       default: null
-    }
+    },
+  },
+  created () {
+    // console.log(this.positionResult);
+
+    // if (this.positionResult) {
+    //   this.center = [this.positionResult.position.lng, this.positionResult.position.lat]
+    // }
   },
   data () {
     return {
       //AMAP地图
       amapManager,
       // zoom: 12,
-      center: [121.59996, 31.197646],
+      center: [26.3318960, 115.3648660],
       positionResult: null,
       events: {
         init: (map) => {
@@ -140,16 +148,16 @@ export default {
   methods: {
     getMap () {
       // amap vue component
-      console.log(amapManager._componentMap);
-      // gaode map instance
-      console.log(amapManager._map);
+      // console.log(amapManager._componentMap);
+      // // gaode map instance
+      // console.log(amapManager._map);
     },
     onSearchResult (pois) {
       let latSum = 0;
       let lngSum = 0;
       if (pois.length > 0) {
         pois.forEach(poi => {
-          console.log(poi);
+          // console.log(poi);
 
           let { lng, lat } = poi;
           lngSum += lng;
