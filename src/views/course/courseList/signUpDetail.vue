@@ -86,7 +86,6 @@
                        label="学校"
                        width="180"
                        align="center">
-<<<<<<< HEAD
         <template slot-scope="scope">
           <span>{{scope.row.user.school}}</span>
         </template>
@@ -116,8 +115,6 @@
       </el-table-column>
       <el-table-column align="center"
                        label="报名时间">
-=======
->>>>>>> origin/master
         <template slot-scope="scope">
           <span>{{scope.row.user.school}}</span>
         </template>
