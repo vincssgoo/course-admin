@@ -218,6 +218,11 @@
                      :total="total">
       </el-pagination>
     </div>
+    <div style="text-align:center">
+      <el-button style="margin-top:100px"
+                 type="primary"
+                 @click="backIndex">返 回</el-button>
+    </div>
   </div>
 </template>
 
@@ -301,6 +306,9 @@ export default {
     handleCurrentChange (val) {
       this.listQuery.page = val;
       this.getList();
+    },
+    backIndex () {
+      this.$router.replace({ path: '/course/index' })
     },
     getList () {
       console.log(123);
