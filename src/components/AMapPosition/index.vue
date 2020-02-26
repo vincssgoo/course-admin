@@ -40,6 +40,7 @@
             <el-col :span="5">经纬度：</el-col>
             <el-col :span="18">
               {{ positionResult ? positionResult.position.lat + ',' + positionResult.position.lng : '' }}
+              <!-- {{center.lat ? center.lat + ',' + center.lng : ''}} -->
               <!-- {{ pos ? pos.position.lat + ',' + pos.position.lng : '' }} -->
             </el-col>
           </el-row>
@@ -83,6 +84,15 @@ export default {
     // if (this.positionResult) {
     //   this.center = [this.positionResult.position.lng, this.positionResult.position.lat]
     // }
+    console.log(this.center);
+    // console.log(this.positionResult.position);
+
+    // if (!this.center) {
+    //   this.center = [115.3648660, 26.3318960]
+    // }
+    if (this.center) {
+      this.center = this.center
+    }
   },
   data () {
     return {
@@ -110,6 +120,8 @@ export default {
             });
             //TODO:事件绑定、结果处理等
             positionPicker.on('success', function (positionResult) {
+              console.log(positionResult);
+
               _this.positionResult = positionResult;
             });
             positionPicker.on('fail', function (positionResult) {
@@ -168,6 +180,8 @@ export default {
           lng: lngSum / pois.length,
           lat: latSum / pois.length
         };
+        console.log(center);
+
         this.center = [center.lng, center.lat];
       }
     },
@@ -176,6 +190,10 @@ export default {
     },
     setCenter (lng, lat) {
       this.center = [lng, lat];
+      this.positionResult.position.lat = lat
+      this.positionResult.position.lng = lng
+      console.log(this.positionResult.position);
+
     }
   }
 };

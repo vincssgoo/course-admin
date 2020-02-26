@@ -4,10 +4,17 @@
     <el-form ref="form"
              :model="form"
              label-width="120px">
+      <el-form-item label="排序序号">
+        <el-input v-model="form.weight"
+                  placeholder="请输入排序序号"
+                  style="width:30%"
+                  clearable />
+      </el-form-item>
       <el-form-item label="图片">
 
         <upload-one v-model="form.image"></upload-one>
       </el-form-item>
+
       <el-form-item label="名称">
         <el-input v-model="form.title"
                   placeholder="请输入名称"
@@ -164,6 +171,7 @@ export default {
       // },
       form: {
         id: '',
+        weight: '',
         title: '',
         image: '',
         price: '',
@@ -251,6 +259,12 @@ export default {
       }).then(response => {
         // this.list = response.data.data;
         this.form = response.data
+        if (this.form.latitude && this.form.longitude) {
+          // this.positionNum = this.form.latitude + " , " + this.form.longitude;
+          this.$nextTick(() => {
+            this.$refs["map"].setCenter(this.form.longitude, this.form.latitude);
+          })
+        }
         console.log(this.form.start_time);
         // this.form.start_time = '2019-12-28T' + this.form.start_time + '.000Z'
         // this.form.end_time = '2019-12-28T' + this.form.end_time + '.000Z'
@@ -292,6 +306,7 @@ export default {
       console.log(res);
       this.form.latitude = res.position.lat;
       this.form.longitude = res.position.lng;
+      // this.$refs.map.setCenter(this.form.longitude, this.form.latitude)
     },
     saveData () {
       // this.form.school_id = this.school_id

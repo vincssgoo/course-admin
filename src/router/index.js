@@ -364,27 +364,43 @@ export const asyncRouterMap = [
         title: '学校列表',
 
       }
-    }]
+    }],
+    // hidden: true,
   },
   {
-    path: '/class',
+    path: '/grade',
     alwaysShow: true,
     component: Layout,
     // redirect: '/website/commonMes',
-    name: 'Class',
+    name: 'Grade',
     meta: {
-      title: '班级管理',
-      icon: 'class'
+      title: '年级管理',
+      icon: 'grade'
     },
     children: [{
       path: 'index',
       name: 'Index',
-      component: () => import('@/views/class/index'),
+      component: () => import('@/views/grade/index'),
       meta: {
-        title: '班级列表',
+        title: '年级列表',
         // icon: 'table'
       }
     }]
+  },
+  {
+    component: Layout,
+    path: '/class',
+    name: 'Class',
+    children: [{
+      path: '/class',
+      component: () => import('@/views/class/index'),
+    }],
+
+    meta: {
+      title: '班级列表',
+      // icon: 'table'
+    },
+    hidden: true
   },
   {
     path: '*',

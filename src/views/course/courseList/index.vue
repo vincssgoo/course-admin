@@ -56,6 +56,13 @@
           {{ scope.$index+1 }}
         </template>
       </el-table-column>
+      <el-table-column align="center"
+                       label="排序序号"
+                       width="75">
+        <template slot-scope="scope">
+          {{ scope.row.weight }}
+        </template>
+      </el-table-column>
       <el-table-column label="图片"
                        align="center"
                        width="110">

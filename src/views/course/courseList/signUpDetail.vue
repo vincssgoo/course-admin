@@ -61,17 +61,17 @@
         </template>
       </el-table-column>
       <el-table-column label="昵称"
-                       width="140"
+                       width="120"
                        align="center">
         <template slot-scope="scope">
           <span>{{ scope.row.user.nickname }}</span>
         </template>
       </el-table-column>
       <el-table-column label="联系电话"
-                       width="180"
+                       width="140"
                        align="center">
         <template slot-scope="scope">
-          {{ scope.row.user.phone }}
+          {{ scope.row.children_snap.phone }}
         </template>
       </el-table-column>
       <el-table-column class-name="status-col"
@@ -79,23 +79,31 @@
                        width="120"
                        align="center">
         <template slot-scope="scope">
-          <span>{{scope.row.user.name}}</span>
+          <span>{{scope.row.children_snap.name}}</span>
         </template>
       </el-table-column>
       <el-table-column class-name="status-col"
                        label="学校"
-                       width="180"
+                       width="120"
                        align="center">
         <template slot-scope="scope">
-          <span>{{scope.row.user.school}}</span>
+          <span>{{scope.row.children_snap.school.name}}</span>
+        </template>
+      </el-table-column>
+      <el-table-column class-name="status-col"
+                       label="年级"
+                       width="120"
+                       align="center">
+        <template slot-scope="scope">
+          <span>{{scope.row.children_snap.grade.name}}</span>
         </template>
       </el-table-column>
       <el-table-column class-name="status-col"
                        label="班级"
-                       width="180"
+                       width="120"
                        align="center">
         <template slot-scope="scope">
-          <span>{{scope.row.user.class}}</span>
+          <span>{{scope.row.children_snap.classes.name}}</span>
         </template>
       </el-table-column>
       <el-table-column class-name="status-col"
@@ -103,7 +111,7 @@
                        width="200"
                        align="center">
         <template slot-scope="scope">
-          <span>{{scope.row.user.id_card_number}}</span>
+          <span>{{scope.row.children_snap.id_card_number}}</span>
         </template>
       </el-table-column>
       <el-table-column align="center"
@@ -116,96 +124,10 @@
       <el-table-column align="center"
                        label="报名时间">
         <template slot-scope="scope">
-          <span>{{scope.row.user.school}}</span>
-        </template>
-      </el-table-column>
-      <el-table-column class-name="status-col"
-                       label="班级"
-                       width="180"
-                       align="center">
-        <template slot-scope="scope">
-          <span>{{scope.row.user.class}}</span>
-        </template>
-      </el-table-column>
-      <el-table-column class-name="status-col"
-                       label="身份证号码"
-                       width="200"
-                       align="center">
-        <template slot-scope="scope">
-          <span>{{scope.row.user.id_card_number}}</span>
+          <span>{{scope.row.pay_datetime}}</span>
         </template>
       </el-table-column>
     </el-table>
-
-    <el-table v-loading="listLoading"
-              element-loading-text="Loading"
-              border=""
-              fit
-              highlight-current-row
-              :data="exportExcels"
-              id="rebateSetTable"
-              style="display:none;">
-      <el-table-column label="昵称"
-                       width="140"
-                       align="center">
-        <template slot-scope="scope">
-          <span>{{ scope.row.user.nickname }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column label="联系电话"
-                       width="180"
-                       align="center">
-        <template slot-scope="scope">
-          {{ scope.row.user.phone }}
-        </template>
-      </el-table-column>
-      <el-table-column class-name="status-col"
-                       label="姓名"
-                       width="120"
-                       align="center">
-        <template slot-scope="scope">
-          <span>{{scope.row.user.name}}</span>
-        </template>
-      </el-table-column>
-      <el-table-column class-name="status-col"
-                       label="学校"
-                       width="180"
-                       align="center">
-        <template slot-scope="scope">
-          <span>{{scope.row.user.school}}</span>
-        </template>
-      </el-table-column>
-      <el-table-column class-name="status-col"
-                       label="班级"
-                       width="180"
-                       align="center">
-        <template slot-scope="scope">
-          <span>{{scope.row.user.class}}</span>
-        </template>
-      </el-table-column>
-      <el-table-column class-name="status-col"
-                       label="身份证号码"
-                       width="200"
-                       align="center">
-        <template slot-scope="scope">
-          <span>{{scope.row.user.id_card_number}}</span>
-        </template>
-      </el-table-column>
-      <el-table-column align="center"
-                       label="价格"
-                       width="120">
-        <template slot-scope="scope">
-          <span>{{ scope.row.price }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column align="center"
-                       label="报名时间">
-        <template slot-scope="scope">
-          <span>{{ scope.row.pay_datetime }}</span>
-        </template>
-      </el-table-column>
-    </el-table>
-
     <div class="block"
          style="margin-top:25px">
       <!-- <span class="demonstration">完整功能</span> -->

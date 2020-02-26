@@ -3,17 +3,13 @@
     <div style="margin-bottom:15px;">
       <el-button type="primary"
                  @click="dialogVisible = true">新增</el-button>
-      <el-button type="success"
-                 plain
-                 style="float:right;"
-                 @click="backIndex">返回</el-button>
       <el-button type="primary"
                  plain
                  style="float:right;"
                  icon="el-icon-search"
                  @click="handleFilter(value)">搜索</el-button>
 
-      <el-input placeholder="请输入年级/班级名称"
+      <el-input placeholder="请输入年级名称"
                 v-model="listQuery.keyword"
                 style="width: 320px;float:right;margin-right:20px"
                 clearable>
@@ -33,8 +29,9 @@
           {{ scope.$index+1 }}
         </template>
       </el-table-column>
+
       <el-table-column align="center"
-                       label="班级">
+                       label="年级">
         <template slot-scope="scope">
           {{ scope.row.name }}
         </template>
@@ -50,7 +47,10 @@
             <el-button @click="handleDelete(scope.row)"
                        type="danger">删除</el-button>
           </div>
-
+          <div style="margin-top:8px">
+            <el-button @click="goClass(scope.row)"
+                       type="success">班级管理</el-button>
+          </div>
         </template>
       </el-table-column>
 
@@ -61,10 +61,10 @@
                :model="form"
                label-position="left"
                label-width="70px">
-        <el-form-item label="班级名称"
+        <el-form-item label="年级名称"
                       prop="name">
           <el-input v-model="form.name"
-                    placeholder="请输入班级名称"
+                    placeholder="请输入年级名称"
                     style="width:50%" />
         </el-form-item>
       </el-form>
@@ -76,18 +76,6 @@
                    :loading="btnLoading">确定</el-button>
       </div>
     </el-dialog>
-    <div class="block"
-         style="margin-top:25px">
-      <!-- <span class="demonstration">完整功能</span> -->
-      <el-pagination @size-change="handleSizeChange"
-                     @current-change="handleCurrentChange"
-                     :current-page="listQuery.page"
-                     :page-sizes="[5, 10, 20, 50,100]"
-                     :page-size="listQuery.limit"
-                     layout="total, sizes, prev, pager, next, jumper"
-                     :total="total">
-      </el-pagination>
-    </div>
     <!-- <router-view /> -->
   </div>
 </template>
@@ -103,30 +91,20 @@ export default {
       list_type: null,
       listLoading: true,
       btnLoading: false,
-      total: null,
       dialogVisible: false,
-      schoolQuery: {
-        keyword: '',
-      },
       listQuery: {
         keyword: '',
-        grade_id: '',
-        page: 1,
-        limit: 10,
+
       },
       form: {
         id: '',
         name: '',
-        grade_id: '',
-      },
-      schoolList: null,
+        grade_id: "",
+      }
     }
   },
   created () {
-    this.listQuery.grade_id = this.$route.query.grade_id
-
     this.getList();
-    this.getSchoolList();
   },
   watch: {
     dialogVisible (newVal, oldVal) {
@@ -135,45 +113,24 @@ export default {
         this.form = {
           id: '',
           name: '',
-          // grade_id: '',
+          grade_id: '',
         };
       }
     }
   },
   methods: {
-    backIndex () {
-      this.$router.replace({ path: '/grade/index' })
-    },
-    getSchoolList () {
-      request({
-        url: "/api/backend/grade/index",
-        method: "get",
-        params: this.schoolQuery
-      }).then(response => {
-        this.schoolList = response.data.data;
-        console.log(this.schoolList);
-      });
-
-    },
-    handleSizeChange (val) {
-      this.listQuery.limit = val;
-      this.getList();
-    },
-    handleCurrentChange (val) {
-      this.listQuery.page = val;
-      this.getList();
-    },
     handleDelete (row) {
-      this.$confirm("确定要删除该班级吗？", "提示", {
+      this.$confirm("确定要删除该年级吗？", "提示", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
         type: "warning"
       }).then(() => {
         request({
-          url: "/api/backend/classes/delete",
+          url: "/api/backend/grade/delete",
           method: "post",
           data: { id: row.id },
         }).then(() => {
+          console.log(123);
           // 删除最后一条数据时无数据问题
           this.list.length <= 1 ? this.listQuery.page-- : false;
           this.getList();
@@ -184,16 +141,29 @@ export default {
         });
       });
     },
+    goClass (row) {
+      this.$router.replace({
+        path: '/class',
+        query: {
+          grade_id: row.id,
+          // title: row.title,
+          // school: row.course_site.name
+        }
+      })
+    },
     getList () {
       this.listLoading = true;
       request({
-        url: "/api/backend/classes/index",
+        url: "/api/backend/grade/index",
         method: "get",
         params: this.listQuery
       }).then(response => {
         this.list = response.data.data;
-        this.total = response.data.total;
         this.listLoading = false;
+        console.log(this.list);
+
+        // console.log(this.list);
+        // this.listQuery.sale_status = ''
       });
 
     },
@@ -211,12 +181,19 @@ export default {
       this.getList();
     },
     saveData () {
-      this.form.grade_id = this.$route.query.grade_id
+      if (!this.form.name) {
+        this.$message({
+          type: "warning",
+          message: "请输入班级名称"
+        });
+        return;
+      }
+
       this.btnLoading = true;
       request({
-        url: "/api/backend/classes/store",
+        url: "/api/backend/grade/store",
         method: "post",
-        data: { name: this.form.name, grade_id: this.form.grade_id }
+        data: this.form
       })
         .then(() => {
           this.btnLoading = false;
